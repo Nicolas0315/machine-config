@@ -45,3 +45,4 @@ if ($failures.Count -gt 0) {
 }
 
 Write-Host "OK: $($identifiers.Count) WinGet packages, $($settings.Registry.Count) registry settings, PowerShell syntax valid"
+exit 0
