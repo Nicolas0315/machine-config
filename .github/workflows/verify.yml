@@ -1,0 +1,32 @@
+name: Verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Validate PowerShell and manifests
+        shell: pwsh
+        run: ./scripts/Test-Config.ps1
+
+  nix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: cachix/install-nix-action@b4b293eae0b79aac8a161bb32925a5508c9cca93 # v31
+      - name: Parse Nix sources and validate flake outputs
+        run: |
+          find . -type f -name '*.nix' -print0 | sort -z | xargs -0 -n1 nix-instantiate --parse >/dev/null
+          nix flake check --no-build

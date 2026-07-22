@@ -1,0 +1,14 @@
+.DS_Store
+result
+result-*
+.direnv/
+.env
+.env.*
+!.env.example
+*.log
+*.bak
+backups/
+secrets/
+private/
+auth/
+credentials/
